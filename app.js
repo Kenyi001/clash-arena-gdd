@@ -56,11 +56,22 @@ const ENTITY_DECK = [
     description: "Clad en armadura rúnica pesada. Ataca lentamente con un mandoble impregnado de fuego azul y bloquea proyectiles.",
     stats: { "Costo": "4 Cenizas", "HP": "1,100", "Daño": "75/s" },
     icon: `<svg viewBox="0 0 100 100" width="80" height="80">
-      <circle cx="50" cy="50" r="40" fill="#06b6d4" opacity="0.15"/>
-      <rect x="35" y="30" width="30" height="40" rx="5" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
-      <path d="M40 45 L60 45 M50 45 L50 65" stroke="#06b6d4" stroke-width="2"/>
-      <circle cx="43" cy="40" r="2.5" fill="#00ffff"/>
-      <circle cx="57" cy="40" r="2.5" fill="#00ffff"/>
+      <defs>
+        <linearGradient id="grad-dk-shield" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1e293b" />
+          <stop offset="100%" stop-color="#0b1329" />
+        </linearGradient>
+        <linearGradient id="grad-cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#22d3ee" />
+          <stop offset="100%" stop-color="#06b6d4" />
+        </linearGradient>
+      </defs>
+      <path d="M15 85 L85 15 M20 15 L80 85" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+      <path d="M15 85 L22 78 M85 15 L78 22 M20 15 L27 22 M80 85 L73 78" stroke="#06b6d4" stroke-width="4" stroke-linecap="round"/>
+      <path d="M25 20 Q50 15 75 20 Q75 60 50 85 Q25 60 25 20 Z" fill="url(#grad-dk-shield)" stroke="#06b6d4" stroke-width="2"/>
+      <path d="M50 30 L50 65 M40 40 L60 40 M42 55 L58 55" fill="none" stroke="url(#grad-cyan-glow)" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="43" cy="35" r="2.5" fill="#fff" filter="drop-shadow(0 0 3px #00ffff)"/>
+      <circle cx="57" cy="35" r="2.5" fill="#fff" filter="drop-shadow(0 0 3px #00ffff)"/>
     </svg>`
   },
   {
@@ -71,9 +82,17 @@ const ENTITY_DECK = [
     description: "Una arquera incorpórea que dispara saetas cargadas de energía helada. Puede atacar a unidades aéreas.",
     stats: { "Costo": "3 Cenizas", "HP": "310", "Daño": "42/s" },
     icon: `<svg viewBox="0 0 100 100" width="80" height="80">
-      <circle cx="50" cy="50" r="40" fill="#f59e0b" opacity="0.15"/>
-      <path d="M 30 70 A 30 30 0 0 1 70 30" fill="none" stroke="#f59e0b" stroke-width="3"/>
-      <path d="M 30 30 L 70 70 M 60 70 L 70 70 L 70 60" fill="none" stroke="#fff" stroke-width="2"/>
+      <defs>
+        <linearGradient id="grad-bow" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#fbbf24" />
+          <stop offset="100%" stop-color="#d97706" />
+        </linearGradient>
+      </defs>
+      <line x1="25" y1="25" x2="25" y2="75" stroke="#fef08a" stroke-width="1.5" opacity="0.6"/>
+      <path d="M 25 25 Q 75 50 25 75" fill="none" stroke="url(#grad-bow)" stroke-width="4.5" stroke-linecap="round" filter="drop-shadow(0 0 5px rgba(245,158,11,0.4))"/>
+      <line x1="15" y1="50" x2="65" y2="50" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" filter="drop-shadow(0 0 4px #00ffff)"/>
+      <polygon points="65,46 75,50 65,54" fill="#22d3ee"/>
+      <path d="M12 43 L20 50 L12 57" fill="none" stroke="#fbbf24" stroke-width="2"/>
     </svg>`
   },
   {
@@ -84,11 +103,21 @@ const ENTITY_DECK = [
     description: "Lanza proyectiles necróticos de salpicadura y resucita a dos pequeños esqueletos de combate cada 8 segundos.",
     stats: { "Costo": "5 Cenizas", "HP": "480", "Daño": "55/s" },
     icon: `<svg viewBox="0 0 100 100" width="80" height="80">
-      <circle cx="50" cy="50" r="40" fill="#8b5cf6" opacity="0.15"/>
-      <path d="M 30 75 Q 50 20 70 75 Z" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="2"/>
-      <circle cx="50" cy="55" r="10" fill="#f1f5f9"/>
-      <circle cx="46" cy="53" r="2.5" fill="#000"/>
-      <circle cx="54" cy="53" r="2.5" fill="#000"/>
+      <defs>
+        <linearGradient id="grad-hood" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#4c1d95" />
+          <stop offset="100%" stop-color="#1e1b4b" />
+        </linearGradient>
+      </defs>
+      <circle cx="50" cy="50" r="35" fill="none" stroke="#4ade80" stroke-width="2" stroke-dasharray="8 4" opacity="0.5"/>
+      <path d="M 25 75 Q 50 15 75 75 Q 50 85 25 75 Z" fill="url(#grad-hood)" stroke="#8b5cf6" stroke-width="2"/>
+      <path d="M 38 68 Q 50 48 62 68 Q 50 78 38 68 Z" fill="#f8fafc" stroke="#475569" stroke-width="1"/>
+      <circle cx="44" cy="62" r="4" fill="#0f172a"/>
+      <circle cx="56" cy="62" r="4" fill="#0f172a"/>
+      <circle cx="44" cy="62" r="1.5" fill="#4ade80" filter="drop-shadow(0 0 2px #22c55e)"/>
+      <circle cx="56" cy="62" r="1.5" fill="#4ade80" filter="drop-shadow(0 0 2px #22c55e)"/>
+      <polygon points="50,66 48,70 52,70" fill="#0f172a"/>
+      <path d="M 45 72 L 55 72" stroke="#475569" stroke-width="1.5"/>
     </svg>`
   },
   {
@@ -99,10 +128,21 @@ const ENTITY_DECK = [
     description: "Se escabulle en las sombras. Ignora a tus guerreros y corre directamente a robar el éter de tus Extractores.",
     stats: { "Dificultad": "Baja", "Velocidad": "Muy Rápida", "Objetivo": "Almacenes" },
     icon: `<svg viewBox="0 0 100 100" width="80" height="80">
-      <circle cx="50" cy="50" r="40" fill="#ec4899" opacity="0.15"/>
-      <path d="M 20 40 L 40 45 L 35 60 L 15 50 Z" fill="#ec4899"/>
-      <path d="M 80 40 L 60 45 L 65 60 L 85 50 Z" fill="#ec4899"/>
-      <circle cx="50" cy="60" r="15" fill="#7c2d12"/>
+      <defs>
+        <linearGradient id="grad-goblin" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ec4899" />
+          <stop offset="100%" stop-color="#9d174d" />
+        </linearGradient>
+      </defs>
+      <path d="M 10 38 Q 30 40 40 46 L 30 60 Z" fill="url(#grad-goblin)" stroke="#f472b6" stroke-width="1"/>
+      <path d="M 90 38 Q 70 40 60 46 L 70 60 Z" fill="url(#grad-goblin)" stroke="#f472b6" stroke-width="1"/>
+      <path d="M30 46 Q50 35 70 46 Q72 65 50 78 Q28 65 30 46 Z" fill="url(#grad-goblin)" stroke="#9d174d" stroke-width="2"/>
+      <path d="M 36 50 Q 42 45 46 52" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 64 50 Q 58 45 54 52" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="42" cy="51" r="1.5" fill="#fff"/>
+      <circle cx="58" cy="51" r="1.5" fill="#fff"/>
+      <path d="M 40 74 Q 50 68 60 74 Q 70 90 50 92 Q 30 90 40 74 Z" fill="#78350f" stroke="#451a03" stroke-width="1.5"/>
+      <circle cx="50" cy="83" r="3" fill="#22d3ee" filter="drop-shadow(0 0 3px #00ffff)"/>
     </svg>`
   },
   {
@@ -113,9 +153,20 @@ const ENTITY_DECK = [
     description: "Una bestia voladora tallada en granito. Escupe fuego fatuo azul y es inmune a las trampas terrestres.",
     stats: { "Dificultad": "Media", "HP": "550", "Daño": "50/s" },
     icon: `<svg viewBox="0 0 100 100" width="80" height="80">
-      <circle cx="50" cy="50" r="40" fill="#3b82f6" opacity="0.15"/>
-      <path d="M 15 45 L 50 30 L 85 45 L 50 65 Z" fill="#475569" stroke="#fff" stroke-width="1.5"/>
-      <circle cx="50" cy="45" r="12" fill="#334155"/>
+      <defs>
+        <linearGradient id="grad-wing" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#475569" />
+          <stop offset="100%" stop-color="#1e293b" />
+        </linearGradient>
+      </defs>
+      <path d="M 50 45 Q 25 15 10 40 Q 30 45 50 50 Z" fill="url(#grad-wing)" stroke="#64748b" stroke-width="1.5"/>
+      <path d="M 50 45 Q 75 15 90 40 Q 70 45 50 50 Z" fill="url(#grad-wing)" stroke="#64748b" stroke-width="1.5"/>
+      <path d="M 50 50 L 50 82 L 45 78 L 50 82 L 55 78" stroke="#334155" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="50" cy="45" r="14" fill="#334155" stroke="#475569" stroke-width="2"/>
+      <polygon points="44,43 48,41 46,45" fill="#f97316" filter="drop-shadow(0 0 2px #f97316)"/>
+      <polygon points="56,43 52,41 54,45" fill="#f97316" filter="drop-shadow(0 0 2px #f97316)"/>
+      <path d="M 44 35 L 40 22 L 48 32" fill="#334155" stroke="#475569" stroke-width="1.5"/>
+      <path d="M 56 35 L 60 22 L 52 32" fill="#334155" stroke="#475569" stroke-width="1.5"/>
     </svg>`
   },
   {
@@ -126,9 +177,21 @@ const ENTITY_DECK = [
     description: "El guardián supremo de las catacumbas. Invoca lluvias de ceniza que dañan a tus tropas en toda la arena.",
     stats: { "Dificultad": "Extrema", "HP": "8,500", "Daño": "160/s" },
     icon: `<svg viewBox="0 0 100 100" width="80" height="80">
-      <circle cx="50" cy="50" r="40" fill="#ef4444" opacity="0.15"/>
-      <polygon points="25,35 35,10 50,25 65,10 75,35 50,45" fill="#ef4444" stroke="#fff" stroke-width="2"/>
-      <path d="M30 65 Q50 85 70 65 L60 45 L40 45 Z" fill="#4c0519"/>
+      <defs>
+        <linearGradient id="grad-fire" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#b91c1c" />
+          <stop offset="60%" stop-color="#ef4444" />
+          <stop offset="100%" stop-color="#f43f5e" />
+        </linearGradient>
+      </defs>
+      <path d="M 20 65 C 20 20, 80 20, 80 65 C 80 85, 20 85, 20 65 Z" fill="none" stroke="url(#grad-fire)" stroke-width="2" opacity="0.3" filter="blur(2px)"/>
+      <polygon points="25,35 32,8 43,24 50,4 57,24 68,8 75,35 50,45" fill="#111827" stroke="#ef4444" stroke-width="1.5"/>
+      <circle cx="50" cy="18" r="2" fill="#ef4444" filter="drop-shadow(0 0 3px #ef4444)"/>
+      <path d="M34 50 Q50 36 66 50 Q66 70 50 82 Q34 70 34 50 Z" fill="url(#grad-fire)" stroke="#4c0519" stroke-width="2"/>
+      <circle cx="44" cy="54" r="5" fill="#000"/>
+      <circle cx="56" cy="54" r="5" fill="#000"/>
+      <polygon points="44,52 46,56 42,56" fill="#fff" filter="drop-shadow(0 0 3px #f43f5e)"/>
+      <polygon points="56,52 54,56 58,56" fill="#fff" filter="drop-shadow(0 0 3px #f43f5e)"/>
     </svg>`
   }
 ];
