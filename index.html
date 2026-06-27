@@ -3,124 +3,162 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Biblia de Clash Arena - Documento de Diseño de Juego (GDD)</title>
-  <meta name="description" content="El GDD oficial de Clash Arena: Realms of War. Detalles del desarrollo, modos de juego PvP 1vs1, bucle principal, campaña PvE y arquitectura tecnológica.">
+  <title>Realms of Ruin - Biblia del Videojuego y Pitch Deck 1v1 RTS</title>
+  <meta name="description" content="El Documento de Diseño (GDD) y Biblia oficial de Realms of Ruin: un juego de estrategia en tiempo real 1vs1 para móviles, ambientado en la fantasía oscura gótica.">
   
   <!-- CSS Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <div class="app-container">
+  <!-- Contenedor de Partículas Rúnicas Flotantes en el Fondo -->
+  <div class="background-particles" id="backgroundParticles"></div>
+
+  <!-- Contenedor Principal del Pitch Deck -->
+  <div class="main-wrapper">
     
-    <!-- Barra Lateral Izquierda (Sidebar) -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="logo-group">
-          <span class="logo-main">Clash Arena</span>
-          <span class="logo-sub">Biblia del Juego</span>
-        </div>
-        
-        <!-- Buscador de capítulos -->
+    <!-- Hero / Splash Section -->
+    <header class="hero-section">
+      <span class="runic-badge">1v1 Mobile Strategy Arena</span>
+      <h1 class="hero-title" id="mainTitle">Realms of Ruin</h1>
+      <p class="hero-subtitle">
+        La Biblia de Diseño y Pitch Deck definitivo. Explora la visión técnica, el bucle de juego, la arquitectura de red síncrona y el catálogo de tropas rúnicas de este RTS de fantasía oscura gótica.
+      </p>
+      
+      <!-- Controles de Navegación del Pitch Deck -->
+      <div class="nav-buttons-container">
+        <a href="#documentos" class="btn-primary">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle;">
+            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+          </svg>
+          Explorar Grimorio
+        </a>
+        <a href="#mazo" class="btn-secondary">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle;">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          Mazo Espectral
+        </a>
+        <button id="btnAddNew" class="btn-secondary" title="Crear una nueva sección del GDD">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle;">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Crear Capítulo
+        </button>
+        <button id="btnReset" class="btn-secondary" title="Restaurar base de datos">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+          </svg>
+          Restablecer
+        </button>
+      </div>
+    </header>
+
+    <!-- Sección de Capítulos (GDD Dashboard) -->
+    <section id="documentos" aria-label="Secciones del Grimorio GDD">
+      <div class="section-title-group">
+        <h2 class="section-title">Grimorio de Diseño</h2>
+        <p class="section-subtitle">Los pilares estratégicos, mecánicas y pila tecnológica del juego</p>
+      </div>
+
+      <!-- Buscador en el Dashboard -->
+      <div class="dashboard-search-wrapper">
         <div class="search-wrapper">
           <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" id="searchInput" class="search-input" placeholder="Buscar en el documento..." aria-label="Buscar capítulos">
+          <input type="text" id="searchInput" class="search-input" placeholder="Buscar conceptos o tecnologías en el GDD..." aria-label="Buscar en el GDD">
         </div>
       </div>
 
-      <!-- Lista de Capítulos Dinámica -->
-      <nav class="nav-list" id="navList" aria-label="Capítulos de la biblia del juego">
+      <!-- Cuadrícula de Capítulos -->
+      <div class="gdd-dashboard" id="gddDashboard">
         <!-- Rellenado dinámicamente con JS -->
-      </nav>
-
-      <!-- Botones de Acción en el pie del Sidebar -->
-      <div class="sidebar-footer">
-        <button id="btnAddNew" class="btn-primary" title="Añadir una nueva sección o capítulo al GDD local">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Nuevo Capítulo
-        </button>
-        <button id="btnReset" class="btn-secondary" title="Restaurar el GDD por defecto">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
-          </svg>
-          Restaurar
-        </button>
       </div>
-    </aside>
+    </section>
 
-    <!-- Área de Contenido Principal (Lectura) -->
-    <main class="content-area">
-      <!-- Barra Superior de Navegación del Lector -->
-      <div class="top-bar">
-        <!-- Botón Menú Móvil -->
-        <button id="btnMenu" class="btn-menu" aria-label="Abrir menú de navegación">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-
-        <!-- Etiqueta de Categoría del Capítulo Activo -->
-        <span id="currentCategoryTag" class="chapter-category-tag tag-concept">CONCEPTO</span>
-
-        <!-- Botones de Acción de Lectura -->
-        <div class="reader-actions">
-          <button id="btnEditChapter" class="btn-secondary" title="Editar contenido de este capítulo" style="padding: 0.5rem 1rem;">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-              <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-            </svg>
-            Editar
-          </button>
-          <button id="btnDeleteChapter" class="btn-secondary" title="Borrar este capítulo personalizado" style="padding: 0.5rem 1rem; border-color: rgba(255, 77, 77, 0.2); color: #ff4d4d;">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            </svg>
-            Borrar
-          </button>
-        </div>
+    <!-- Sección del Mazo Espectral (Tropas y Enemigos) -->
+    <section id="mazo" class="deck-showcase-section" aria-label="Mazo de unidades y tropas">
+      <div class="section-title-group">
+        <h2 class="section-title">El Mazo Espectral</h2>
+        <p class="section-subtitle">Las fuerzas rúnicas que chocan en la arena 1vs1 de Realms of Ruin</p>
       </div>
 
-      <!-- Lector de Documentos principal -->
-      <article class="document-reader">
-        <div class="document-body" id="documentBody">
-          <!-- Rellenado dinámicamente con JS -->
-        </div>
-      </article>
-    </main>
+      <!-- Control de Filtros del Mazo -->
+      <div class="deck-filter-tabs">
+        <button class="deck-filter-btn active" data-filter="all">Todos</button>
+        <button class="deck-filter-btn" data-filter="troop">Aliados (Mazo)</button>
+        <button class="deck-filter-btn" data-filter="enemy">Enemigos (Campaña)</button>
+      </div>
+
+      <!-- Cuadrícula de Cartas del Mazo -->
+      <div class="gdd-entity-grid" id="deckGrid">
+        <!-- Rellenado dinámicamente con JS -->
+      </div>
+    </section>
 
   </div>
 
-  <!-- DRAWER DESLIZABLE (Editor/Creador de Capítulos GDD) -->
+  <!-- VISOR DE LECTURA (Capítulo Ampliado) -->
+  <div class="gdd-viewer-overlay" id="viewerOverlay">
+    <div class="gdd-viewer-container" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+      
+      <div class="viewer-header">
+        <div class="viewer-header-info">
+          <span id="viewerCategoryTag" class="viewer-category-tag tag-concept">CONCEPTO</span>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <button id="btnEditChapter" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle; margin-right: 0.2rem;">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            Editar Capítulo
+          </button>
+          <button class="btn-close-viewer" id="btnCloseViewer" aria-label="Cerrar lectura">&times;</button>
+        </div>
+      </div>
+
+      <!-- Cuerpo del Visor de Lectura -->
+      <div class="viewer-body">
+        <article class="viewer-content" id="viewerContent">
+          <!-- Rellenado dinámicamente con JS -->
+        </article>
+      </div>
+
+      <div class="viewer-footer">
+        <button class="btn-secondary" onclick="closeViewer()">Cerrar Lectura</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DRAWER DESLIZABLE (Escritor del Grimorio) -->
   <div class="drawer-overlay" id="drawerOverlay">
     <div class="drawer" role="dialog" aria-labelledby="drawerTitle">
       
       <div class="drawer-header">
-        <h2 id="drawerTitle">Crear Nuevo Capítulo</h2>
+        <h2 id="drawerTitle">Escribir en el Grimorio</h2>
         <button class="btn-close" id="btnCloseDrawer" aria-label="Cerrar formulario">&times;</button>
       </div>
 
       <form id="chapterForm" class="drawer-body">
-        <!-- Campo ID Oculto para Editar -->
+        <!-- Campo ID Oculto -->
         <input type="hidden" id="chapterId">
 
         <!-- Título -->
         <div class="form-group">
           <label for="chapterTitle">Título del Capítulo</label>
-          <input type="text" id="chapterTitle" class="form-control" placeholder="Ej: 7. Balanceo y Ajuste de Unidades" required>
+          <input type="text" id="chapterTitle" class="form-control" placeholder="Ej: 8. Balance de Tropas y Daño" required>
         </div>
 
         <!-- Categoría -->
         <div class="form-group">
-          <label for="chapterCategory">Categoría del GDD</label>
+          <label for="chapterCategory">Categoría</label>
           <select id="chapterCategory" class="form-control">
             <option value="concept">Concepto y Visión</option>
             <option value="gameplay">Mecánicas de Juego (Core)</option>
@@ -132,38 +170,38 @@
 
         <!-- Resumen breve -->
         <div class="form-group">
-          <label for="chapterSummary">Resumen Corto (Aparece en la barra lateral)</label>
-          <input type="text" id="chapterSummary" class="form-control" placeholder="Ej: Fórmulas de daño y velocidad de ataque..." required>
+          <label for="chapterSummary">Resumen Breve (Aparece en la tarjeta)</label>
+          <input type="text" id="chapterSummary" class="form-control" placeholder="Ej: Fórmulas de coste de éter y velocidad..." required>
         </div>
 
-        <!-- Cuerpo del Capítulo en HTML -->
+        <!-- Cuerpo del GDD (HTML) -->
         <div class="form-group">
-          <label for="chapterContent">Contenido del Capítulo (Soporta etiquetas HTML)</label>
-          <textarea id="chapterContent" class="form-control" rows="15" placeholder="Escribe el cuerpo del documento..." required style="font-family: monospace; font-size: 0.9rem; line-height: 1.5; resize: vertical;"></textarea>
+          <label for="chapterContent">Contenido del Documento (HTML Permitido)</label>
+          <textarea id="chapterContent" class="form-control" rows="15" placeholder="Escribe el cuerpo técnico del capítulo..." required style="font-family: monospace; font-size: 0.9rem; line-height: 1.5; resize: vertical;"></textarea>
         </div>
 
-        <!-- Botones de Acción -->
+        <!-- Botones -->
         <div class="drawer-footer">
           <button type="button" id="btnCancelDrawer" class="btn-secondary">Cancelar</button>
-          <button type="submit" class="btn-primary">Guardar Capítulo</button>
+          <button type="submit" class="btn-primary">Guardar en el Grimorio</button>
         </div>
       </form>
 
     </div>
   </div>
 
-  <!-- MODAL DE EXPORTAR JSON (Guardado persistente) -->
+  <!-- MODAL EXPORTAR JSON -->
   <div class="modal-overlay" id="jsonModalOverlay" role="dialog" aria-modal="true" aria-labelledby="jsonModalTitle">
     <div class="modal-content">
       
       <div class="modal-header">
-        <h2 id="jsonModalTitle">¡Capítulo Guardado en tu Navegador!</h2>
+        <h2 id="jsonModalTitle" style="font-family: var(--font-display); font-weight: 700; font-size: 1.3rem;">¡Capítulo Guardado en tu Navegador!</h2>
         <button class="btn-close" id="btnCloseJsonModal" aria-label="Cerrar">&times;</button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body" style="gap: 1rem;">
         <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
-          El capítulo ha sido guardado temporalmente en este navegador. Para hacerlo **permanente** y que aparezca en el sitio web publicado en Azure para todo el mundo, abre <code style="color: var(--color-pvp);">database.js</code> e introduce el siguiente fragmento JSON en la base de datos `DEFAULT_GDD_DATABASE`:
+          El capítulo ha sido guardado temporalmente en este navegador. Para hacerlo **permanente** y que aparezca en el sitio web de Azure de forma fija, abre <code style="color: var(--necro-purple);">database.js</code> e introduce el siguiente fragmento JSON en la base de datos `DEFAULT_GDD_DATABASE`:
         </p>
         
         <pre class="json-preview" id="jsonCodePreview">
@@ -182,12 +220,12 @@
     </div>
   </div>
 
-  <!-- AVISOS TOAST (Notificaciones Flotantes) -->
+  <!-- TOAST FLOATING NOTIFICATION -->
   <div class="toast" id="toast" role="alert">
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
-    <span id="toastText">Actualización del documento</span>
+    <span id="toastText">Actualización del grimorio</span>
   </div>
 
   <!-- Scripts -->
