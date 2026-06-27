@@ -1,31 +1,34 @@
-// La Biblia de Clash of Realms - Application Logic
+// La Biblia de Clash Arena - GDD Application Logic
 
 // Elementos del DOM
-const cardsGrid = document.getElementById("cardsGrid");
+const appContainer = document.querySelector(".app-container");
+const navList = document.getElementById("navList");
 const searchInput = document.getElementById("searchInput");
-const tabButtons = document.querySelectorAll(".tab-btn");
+const btnMenu = document.getElementById("btnMenu");
 const btnAddNew = document.getElementById("btnAddNew");
 const btnReset = document.getElementById("btnReset");
 
-// Modal de detalles
-const modalOverlay = document.getElementById("modalOverlay");
-const btnCloseModal = document.getElementById("btnCloseModal");
-const modalIcon = document.getElementById("modalIcon");
-const modalCategory = document.getElementById("modalCategory");
-const modalName = document.getElementById("modalName");
-const modalDesc = document.getElementById("modalDesc");
-const modalStatsBody = document.getElementById("modalStatsBody");
-const modalLore = document.getElementById("modalLore");
+// Barra superior de lectura
+const currentCategoryTag = document.getElementById("currentCategoryTag");
+const btnEditChapter = document.getElementById("btnEditChapter");
+const btnDeleteChapter = document.getElementById("btnDeleteChapter");
 
-// Drawer de nuevo elemento
+// Panel del Lector
+const documentBody = document.getElementById("documentBody");
+
+// Drawer de Edición/Creación
 const drawerOverlay = document.getElementById("drawerOverlay");
+const drawerTitle = document.getElementById("drawerTitle");
 const btnCloseDrawer = document.getElementById("btnCloseDrawer");
 const btnCancelDrawer = document.getElementById("btnCancelDrawer");
-const newItemForm = document.getElementById("newItemForm");
-const statsFieldsContainer = document.getElementById("statsFieldsContainer");
-const btnAddStatField = document.getElementById("btnAddStatField");
+const chapterForm = document.getElementById("chapterForm");
+const chapterIdInput = document.getElementById("chapterId");
+const chapterTitleInput = document.getElementById("chapterTitle");
+const chapterCategorySelect = document.getElementById("chapterCategory");
+const chapterSummaryInput = document.getElementById("chapterSummary");
+const chapterContentInput = document.getElementById("chapterContent");
 
-// Modal de JSON Export
+// Modal de exportación JSON
 const jsonModalOverlay = document.getElementById("jsonModalOverlay");
 const btnCloseJsonModal = document.getElementById("btnCloseJsonModal");
 const btnCopyJson = document.getElementById("btnCopyJson");
@@ -35,299 +38,214 @@ const jsonCodePreview = document.getElementById("jsonCodePreview");
 const toast = document.getElementById("toast");
 const toastText = document.getElementById("toastText");
 
-// Estado de la aplicación
-let currentCategory = "all";
+// Estado
+let gddDatabase = [];
+let activeChapterId = "";
 let searchQuery = "";
-let gameDatabase = [];
+let isEditingMode = false;
 
-// Iconos SVG predeterminados para nuevos elementos según categoría
-const DEFAULT_ICONS = {
-  buildings: `<svg viewBox="0 0 100 100" width="100" height="100">
-    <defs>
-      <linearGradient id="grad-bld-def" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#FF9800" />
-        <stop offset="100%" stop-color="#E65100" />
-      </linearGradient>
-    </defs>
-    <rect x="25" y="40" width="50" height="45" rx="5" fill="url(#grad-bld-def)" stroke="#FFE082" stroke-width="2"/>
-    <polygon points="20,43 50,15 80,43" fill="#E65100" stroke="#FFE082" stroke-width="2"/>
-    <rect x="42" y="60" width="16" height="25" fill="#3E2723"/>
-    <circle cx="50" cy="30" r="5" fill="#FFD700"/>
-  </svg>`,
-  troops: `<svg viewBox="0 0 100 100" width="100" height="100">
-    <defs>
-      <linearGradient id="grad-trp-def" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#E91E63" />
-        <stop offset="100%" stop-color="#880E4F" />
-      </linearGradient>
-    </defs>
-    <circle cx="50" cy="45" r="25" fill="url(#grad-trp-def)" stroke="#FFF" stroke-width="2"/>
-    <path d="M 30 75 Q 50 65 70 75 L 65 90 L 35 90 Z" fill="#880E4F" stroke="#FFF" stroke-width="2"/>
-    <path d="M 40 40 L 45 45 L 50 40 L 55 45 L 60 40" fill="none" stroke="#FFEB3B" stroke-width="3" stroke-linecap="round"/>
-  </svg>`,
-  spells: `<svg viewBox="0 0 100 100" width="100" height="100">
-    <defs>
-      <linearGradient id="grad-spl-def" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#9C27B0" />
-        <stop offset="100%" stop-color="#4A148C" />
-      </linearGradient>
-    </defs>
-    <circle cx="50" cy="50" r="40" fill="none" stroke="url(#grad-spl-def)" stroke-width="3" stroke-dasharray="5 3" opacity="0.6"/>
-    <rect x="38" y="35" width="24" height="40" rx="8" fill="url(#grad-spl-def)" stroke="#E1BEE7" stroke-width="2"/>
-    <rect x="44" y="27" width="12" height="8" rx="2" fill="#E1BEE7"/>
-    <path d="M 44 48 Q 50 42 56 48" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
-  </svg>`,
-  heroes: `<svg viewBox="0 0 100 100" width="100" height="100">
-    <defs>
-      <linearGradient id="grad-her-def" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#00BCD4" />
-        <stop offset="100%" stop-color="#006064" />
-      </linearGradient>
-    </defs>
-    <polygon points="30,35 35,15 50,28 65,15 70,35 50,45" fill="#FFD700" stroke="#FFF" stroke-width="1.5"/>
-    <circle cx="50" cy="55" r="25" fill="url(#grad-her-def)" stroke="#FFD700" stroke-width="2"/>
-    <path d="M 38 52 Q 50 62 62 52" fill="none" stroke="#FFF" stroke-width="2"/>
-  </svg>`
-};
-
-// Carga Inicial
+// Inicialización
 function init() {
-  gameDatabase = getDatabase();
-  renderCards();
+  gddDatabase = getGddDatabase();
+  
+  // Establecer primer capítulo como activo por defecto si existe
+  if (gddDatabase.length > 0) {
+    activeChapterId = gddDatabase[0].id;
+  }
+  
+  renderSidebar();
+  renderActiveChapter();
   setupEventListeners();
-  addInitialStatField();
 }
 
-// Renderizar tarjetas
-function renderCards() {
-  cardsGrid.innerHTML = "";
+// Renderizar la barra lateral con capítulos
+function renderSidebar() {
+  navList.innerHTML = "";
   
-  const filtered = gameDatabase.filter(item => {
-    const matchesCategory = currentCategory === "all" || item.category === currentCategory;
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery) ||
-                          item.description.toLowerCase().includes(searchQuery) ||
-                          (item.subcategory && item.subcategory.toLowerCase().includes(searchQuery));
-    return matchesCategory && matchesSearch;
+  const filtered = gddDatabase.filter(ch => {
+    const query = searchQuery.toLowerCase().trim();
+    return ch.title.toLowerCase().includes(query) ||
+           ch.summary.toLowerCase().includes(query) ||
+           ch.content.toLowerCase().includes(query);
   });
 
   if (filtered.length === 0) {
-    cardsGrid.innerHTML = `
-      <div class="no-results">
-        <svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <h3>No se encontraron elementos</h3>
-        <p>Intenta con otros términos de búsqueda o añade un nuevo elemento.</p>
+    navList.innerHTML = `
+      <div style="text-align: center; color: var(--text-muted); padding: 2rem 1rem; font-size: 0.9rem;">
+        No se encontraron secciones
       </div>
     `;
     return;
   }
 
-  filtered.forEach(item => {
-    const card = document.createElement("div");
-    card.className = `item-card category-${item.category}`;
-    card.dataset.id = item.id;
+  filtered.forEach(chapter => {
+    const item = document.createElement("div");
+    item.className = `nav-item cat-${chapter.category} ${chapter.id === activeChapterId ? 'active' : ''}`;
+    item.dataset.id = chapter.id;
     
-    // Si es un item personalizado, mostramos el botón de borrar
-    const isCustom = item.id.startsWith("custom_");
-    const deleteBtnHtml = isCustom ? `
-      <button class="btn-delete-card" title="Eliminar elemento permanentemente" data-id="${item.id}">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="3 6 5 6 21 6"></polyline>
-          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-        </svg>
-      </button>
-    ` : '';
-
-    const categoryNames = {
-      buildings: "Edificio",
-      troops: "Tropa",
-      spells: "Hechizo",
-      heroes: "Héroe"
-    };
-
-    card.innerHTML = `
-      <div class="card-header">
-        <div class="badge-wrapper">
-          <span class="badge-cat">${categoryNames[item.category] || item.category}</span>
-          ${item.subcategory ? `<span class="badge-subcat">${item.subcategory.toUpperCase()}</span>` : ''}
-        </div>
-        ${deleteBtnHtml}
-      </div>
-      <div class="card-visual">
-        ${item.icon || DEFAULT_ICONS[item.category] || ''}
-      </div>
-      <div class="card-content">
-        <h3 class="card-title">${item.name}</h3>
-        <p class="card-desc">${item.description}</p>
-      </div>
+    item.innerHTML = `
+      <div class="nav-item-title">${chapter.title}</div>
+      <div class="nav-item-summary">${chapter.summary}</div>
     `;
     
-    // Registrar evento de click para abrir modal (evitando el botón de borrar)
-    card.addEventListener("click", (e) => {
-      if (e.target.closest(".btn-delete-card")) {
-        e.stopPropagation();
-        return;
-      }
-      openDetailModal(item);
+    item.addEventListener("click", () => {
+      activeChapterId = chapter.id;
+      renderSidebar();
+      renderActiveChapter();
+      
+      // En móvil, ocultar la barra lateral tras seleccionar
+      appContainer.classList.remove("show-sidebar");
     });
 
-    cardsGrid.appendChild(card);
-  });
-
-  // Agregar eventos a botones de eliminar
-  document.querySelectorAll(".btn-delete-card").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const id = e.currentTarget.dataset.id;
-      if (confirm("¿Estás seguro de que deseas eliminar este elemento?")) {
-        gameDatabase = deleteItemFromDatabase(id);
-        renderCards();
-        showToast("Elemento eliminado localmente");
-      }
-    });
+    navList.appendChild(item);
   });
 }
 
-// Abrir detalle de elemento
-function openDetailModal(item) {
-  const categoryNames = {
-    buildings: "Edificio",
-    troops: "Tropa",
-    spells: "Hechizo",
-    heroes: "Héroe"
-  };
-
-  modalIcon.innerHTML = item.icon || DEFAULT_ICONS[item.category] || '';
-  modalCategory.innerText = `${categoryNames[item.category] || item.category} • ${item.subcategory || 'General'}`;
-  modalName.innerText = item.name;
-  modalDesc.innerText = item.description;
-  modalLore.innerText = item.lore || "No hay lore registrado sobre este elemento todavía.";
-
-  // Renderizar tabla de estadísticas
-  modalStatsBody.innerHTML = "";
-  if (item.stats && Object.keys(item.stats).length > 0) {
-    Object.entries(item.stats).forEach(([key, value]) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td class="stat-label">${key}</td>
-        <td class="stat-value">${value}</td>
-      `;
-      modalStatsBody.appendChild(row);
-    });
-  } else {
-    modalStatsBody.innerHTML = `
-      <tr>
-        <td colspan="2" style="text-align: center; color: var(--text-muted);">Sin estadísticas numéricas asignadas.</td>
-      </tr>
+// Renderizar el contenido del capítulo activo
+function renderActiveChapter() {
+  const chapter = gddDatabase.find(ch => ch.id === activeChapterId);
+  
+  if (!chapter) {
+    documentBody.innerHTML = `
+      <h1>Sección no encontrada</h1>
+      <p>Selecciona otro capítulo de la barra lateral.</p>
     `;
+    currentCategoryTag.style.display = "none";
+    btnEditChapter.style.display = "none";
+    btnDeleteChapter.style.display = "none";
+    return;
   }
 
-  modalOverlay.classList.add("open");
+  // Actualizar etiqueta de categoría
+  const categories = {
+    concept: "Concepto",
+    gameplay: "Jugabilidad",
+    pvp_pve: "PvP / PvE",
+    tech: "Tecnología",
+    roadmap: "Desarrollo"
+  };
+
+  currentCategoryTag.innerText = categories[chapter.category] || chapter.category;
+  currentCategoryTag.className = `chapter-category-tag tag-${chapter.category}`;
+  currentCategoryTag.style.display = "inline-block";
+  
+  // Mostrar botones de acción de lectura
+  btnEditChapter.style.display = "inline-flex";
+  
+  // Mostrar botón borrar solo si es un capítulo personalizado
+  if (chapter.id.startsWith("chapter_")) {
+    btnDeleteChapter.style.display = "inline-flex";
+  } else {
+    btnDeleteChapter.style.display = "none";
+  }
+
+  // Renderizar contenido
+  documentBody.innerHTML = `
+    <h1>${chapter.title}</h1>
+    <div class="document-text">
+      ${chapter.content}
+    </div>
+  `;
 }
 
-// Cerrar detalle
-function closeDetailModal() {
-  modalOverlay.classList.remove("open");
-}
+// Abrir Drawer de creación/edición
+function openDrawer(edit = false) {
+  isEditingMode = edit;
+  
+  if (edit) {
+    const chapter = gddDatabase.find(ch => ch.id === activeChapterId);
+    if (!chapter) return;
+    
+    drawerTitle.innerText = "Editar Capítulo";
+    chapterIdInput.value = chapter.id;
+    chapterTitleInput.value = chapter.title;
+    chapterCategorySelect.value = chapter.category;
+    chapterSummaryInput.value = chapter.summary;
+    chapterContentInput.value = chapter.content.trim();
+  } else {
+    drawerTitle.innerText = "Crear Nuevo Capítulo";
+    chapterIdInput.value = "";
+    chapterTitleInput.value = "";
+    chapterCategorySelect.value = "concept";
+    chapterSummaryInput.value = "";
+    chapterContentInput.value = `<h2>Subtítulo de Sección</h2>
+<p>Escribe aquí tu contenido detallado...</p>
 
-// Abrir Creador de items
-function openDrawer() {
+<div class="note-box">
+  <strong>Nota:</strong> Puedes destacar información importante dentro de estas cajas de notas.
+</div>`;
+  }
+  
   drawerOverlay.classList.add("open");
 }
 
-// Cerrar Creador de items
+// Cerrar Drawer
 function closeDrawer() {
   drawerOverlay.classList.remove("open");
-  newItemForm.reset();
-  statsFieldsContainer.innerHTML = "";
-  addInitialStatField();
+  chapterForm.reset();
 }
 
-// Manejar campos de estadísticas dinámicos en el formulario
-function addInitialStatField() {
-  addStatRow("Puntos de vida", "1,000");
-}
-
-function addStatRow(initialName = "", initialVal = "") {
-  const row = document.createElement("div");
-  row.className = "stat-row";
-  row.innerHTML = `
-    <input type="text" class="form-control stat-name-input" placeholder="Ej: Daño" value="${initialName}" required>
-    <input type="text" class="form-control stat-val-input" placeholder="Ej: 150" value="${initialVal}" required>
-    <button type="button" class="btn-icon-danger btn-remove-stat" title="Eliminar fila">
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </button>
-  `;
-
-  row.querySelector(".btn-remove-stat").addEventListener("click", () => {
-    row.remove();
-  });
-
-  statsFieldsContainer.appendChild(row);
-}
-
-// Guardar nuevo item
+// Procesar formulario de Guardado
 function handleFormSubmit(e) {
   e.preventDefault();
   
-  const name = document.getElementById("itemName").value.trim();
-  const category = document.getElementById("itemCategory").value;
-  const subcategory = document.getElementById("itemSubcategory").value.trim();
-  const description = document.getElementById("itemDesc").value.trim();
-  const lore = document.getElementById("itemLore").value.trim();
+  const id = chapterIdInput.value;
+  const title = chapterTitleInput.value.trim();
+  const category = chapterCategorySelect.value;
+  const summary = chapterSummaryInput.value.trim();
+  const content = chapterContentInput.value.trim();
 
-  // Recoger estadísticas dinámicas
-  const stats = {};
-  const rows = statsFieldsContainer.querySelectorAll(".stat-row");
-  rows.forEach(row => {
-    const key = row.querySelector(".stat-name-input").value.trim();
-    const val = row.querySelector(".stat-val-input").value.trim();
-    if (key && val) {
-      stats[key] = val;
-    }
-  });
-
-  // Generar ID único
-  const id = `custom_${category}_${Date.now()}`;
-  
-  // Icono SVG auto-generado
-  const icon = DEFAULT_ICONS[category] || '';
-
-  const newItem = {
-    id,
-    name,
+  const chapterData = {
+    id: id || `chapter_${Date.now()}`,
+    title,
     category,
-    subcategory,
-    description,
-    stats,
-    lore,
-    icon
+    summary,
+    content
   };
 
-  // Guardar en Base de Datos (localStorage)
-  gameDatabase = addItemToDatabase(newItem);
-  renderCards();
+  if (id) {
+    // Editar
+    gddDatabase = updateChapterInDatabase(chapterData);
+    showToast("Capítulo actualizado localmente");
+  } else {
+    // Crear
+    gddDatabase = addChapterToDatabase(chapterData);
+    activeChapterId = chapterData.id;
+    showToast("¡Nuevo capítulo creado con éxito!");
+  }
+
+  renderSidebar();
+  renderActiveChapter();
   closeDrawer();
-  showToast("¡Nuevo elemento creado con éxito!");
 
   // Mostrar el código JSON para agregar al archivo físico
-  openJsonModal(newItem);
+  openJsonModal(chapterData);
 }
 
-// Mostrar modal de JSON exportable
-function openJsonModal(item) {
-  // Omitimos el prefijo "custom_" en el ID exportado para que tenga una estructura limpia
-  const exportableItem = {
-    ...item,
-    id: item.id.replace("custom_", "")
+// Eliminar capítulo activo
+function handleDeleteChapter() {
+  if (confirm("¿Estás seguro de que deseas eliminar este capítulo permanentemente de tu navegador?")) {
+    gddDatabase = deleteChapterFromDatabase(activeChapterId);
+    if (gddDatabase.length > 0) {
+      activeChapterId = gddDatabase[0].id;
+    } else {
+      activeChapterId = "";
+    }
+    renderSidebar();
+    renderActiveChapter();
+    showToast("Capítulo eliminado");
+  }
+}
+
+// Mostrar exportador JSON
+function openJsonModal(chapter) {
+  // Limpiamos prefijo temporal si existe
+  const exportable = {
+    ...chapter,
+    id: chapter.id.replace("chapter_", "")
   };
   
-  jsonCodePreview.innerText = JSON.stringify(exportableItem, null, 2);
+  jsonCodePreview.innerText = JSON.stringify(exportable, null, 2);
   jsonModalOverlay.classList.add("open");
 }
 
@@ -346,68 +264,61 @@ function copyJsonToClipboard() {
 
 // Configurar escuchadores de eventos
 function setupEventListeners() {
-  // Filtro por pestañas
-  tabButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      tabButtons.forEach(btn => btn.classList.remove("active"));
-      button.classList.add("active");
-      currentCategory = button.dataset.category;
-      renderCards();
-    });
-  });
-
-  // Búsqueda en tiempo real
+  // Buscar capítulos
   searchInput.addEventListener("input", (e) => {
-    searchQuery = e.target.value.toLowerCase().trim();
-    renderCards();
+    searchQuery = e.target.value;
+    renderSidebar();
   });
 
-  // Acciones de botones principales
-  btnAddNew.addEventListener("click", openDrawer);
+  // Alternar barra lateral en móvil
+  btnMenu.addEventListener("click", () => {
+    appContainer.classList.toggle("show-sidebar");
+  });
+
+  // Botones de acción principales
+  btnAddNew.addEventListener("click", () => openDrawer(false));
+  btnEditChapter.addEventListener("click", () => openDrawer(true));
+  btnDeleteChapter.addEventListener("click", handleDeleteChapter);
+  
   btnReset.addEventListener("click", () => {
-    if (confirm("¿Estás seguro de restaurar los valores iniciales? Se perderán las modificaciones locales.")) {
-      gameDatabase = resetDatabaseToDefault();
-      renderCards();
-      showToast("Base de datos restaurada");
+    if (confirm("¿Deseas restaurar el documento original? Se perderán las modificaciones locales.")) {
+      gddDatabase = resetGddDatabaseToDefault();
+      if (gddDatabase.length > 0) {
+        activeChapterId = gddDatabase[0].id;
+      }
+      renderSidebar();
+      renderActiveChapter();
+      showToast("GDD Restaurado por defecto");
     }
   });
 
-  // Cierres de Modales / Drawers
-  btnCloseModal.addEventListener("click", closeDetailModal);
-  modalOverlay.addEventListener("click", (e) => {
-    if (e.target === modalOverlay) closeDetailModal();
-  });
-
+  // Cerrar Drawer
   btnCloseDrawer.addEventListener("click", closeDrawer);
   btnCancelDrawer.addEventListener("click", closeDrawer);
   drawerOverlay.addEventListener("click", (e) => {
     if (e.target === drawerOverlay) closeDrawer();
   });
 
+  // Exportar JSON Cerrar & Copiar
   btnCloseJsonModal.addEventListener("click", closeJsonModal);
+  btnCopyJson.addEventListener("click", copyJsonToClipboard);
   jsonModalOverlay.addEventListener("click", (e) => {
     if (e.target === jsonModalOverlay) closeJsonModal();
   });
 
-  btnCopyJson.addEventListener("click", copyJsonToClipboard);
+  // Envío de Formulario
+  chapterForm.addEventListener("submit", handleFormSubmit);
 
-  // Agregar fila de estadísticas en formulario
-  btnAddStatField.addEventListener("click", () => addStatRow());
-
-  // Submit del formulario
-  newItemForm.addEventListener("submit", handleFormSubmit);
-
-  // Escuchar tecla Escape
+  // Cerrar con Escape
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      closeDetailModal();
       closeDrawer();
       closeJsonModal();
     }
   });
 }
 
-// Mostrar aviso flotante (Toast)
+// Mostrar aviso
 function showToast(message) {
   toastText.innerText = message;
   toast.classList.add("show");
@@ -416,5 +327,5 @@ function showToast(message) {
   }, 3000);
 }
 
-// Inicializar la aplicación al cargar
+// Iniciar al cargar el DOM
 document.addEventListener("DOMContentLoaded", init);
