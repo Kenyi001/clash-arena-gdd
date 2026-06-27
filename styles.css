@@ -679,3 +679,125 @@ body {
     font-size: 2rem;
   }
 }
+
+/* GDD Entity Grid & Cards */
+.gdd-entity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.gdd-entity-card {
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+.gdd-entity-card:hover {
+  transform: translateY(-3px);
+  background: rgba(16, 24, 48, 0.65);
+}
+
+/* Glow indicators based on type */
+.gdd-entity-card.troop:hover {
+  border-color: rgba(46, 196, 182, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(46, 196, 182, 0.15);
+}
+
+.gdd-entity-card.enemy:hover {
+  border-color: rgba(255, 0, 110, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(255, 0, 110, 0.15);
+}
+
+.gdd-entity-visual {
+  height: 100px;
+  background: rgba(8, 12, 20, 0.5);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(255, 255, 255, 0.05);
+}
+
+.gdd-entity-visual svg {
+  max-height: 100%;
+  max-width: 100%;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+  transition: var(--transition-smooth);
+}
+
+.gdd-entity-card:hover .gdd-entity-visual svg {
+  transform: scale(1.08) rotate(3deg);
+}
+
+.gdd-entity-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.gdd-entity-info h4 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.gdd-entity-role {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.troop .gdd-entity-role {
+  color: var(--color-pvp);
+}
+
+.enemy .gdd-entity-role {
+  color: var(--color-gameplay);
+}
+
+.gdd-entity-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-top: 0.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gdd-entity-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  border-top: 1px dashed var(--border-glass);
+  padding-top: 0.75rem;
+}
+
+.gdd-entity-stats span {
+  font-size: 0.75rem;
+  background: rgba(8, 12, 20, 0.6);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-glass);
+  color: var(--text-secondary);
+}
+
+.gdd-entity-stats span strong {
+  color: #fff;
+}
+
+
+

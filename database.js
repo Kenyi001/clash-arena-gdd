@@ -183,6 +183,148 @@ const DEFAULT_GDD_DATABASE = [
         Objetivo: Integrar pasarelas de pago (Apple Pay / Google Play Billing), sistema de Pase de Batalla dinámico y desplegar servidores en múltiples regiones de Azure para garantizar latencias menores a 80ms a nivel mundial.
       </div>
     `
+  },
+  {
+    id: "catalogo_unidades",
+    title: "7. Catálogo de Tropas y Enemigos",
+    category: "gameplay",
+    summary: "Fichas técnicas y estadísticas del ejército básico del jugador y los enemigos de la campaña.",
+    content: `
+      <h2>7.1 Ejércitos del Imperio</h2>
+      <p>El balance de las unidades y sus interacciones mutuas define el plano estratégico de <strong>Clash Arena</strong>. A continuación se detallan las tropas básicas disponibles para el mazo del jugador, seguidas por los enemigos que custodian las tierras del Caos en el modo PvE.</p>
+
+      <h3>Tropas Básicas del Jugador</h3>
+      <div class="gdd-entity-grid">
+        <!-- Tarjeta 1: Guerrero -->
+        <div class="gdd-entity-card troop">
+          <div class="gdd-entity-visual">
+            <svg viewBox="0 0 100 100" width="80" height="80">
+              <circle cx="50" cy="50" r="40" fill="#ffb703" opacity="0.15"/>
+              <path d="M50 20 L30 45 L45 45 L40 80 L70 45 L52 45 Z" fill="#ffb703" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="gdd-entity-info">
+            <h4>Guerrero de Vanguardia</h4>
+            <p class="gdd-entity-role">Cuerpo a Cuerpo • Asalto</p>
+            <p class="gdd-entity-desc">El pilar del frente. Equipado con espada rúnica, prioriza atacar cualquier tropa enemiga en su camino.</p>
+            <div class="gdd-entity-stats">
+              <span><strong>Costo:</strong> 2 Oro</span>
+              <span><strong>HP:</strong> 650</span>
+              <span><strong>Daño:</strong> 48/s</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tarjeta 2: Cazadora -->
+        <div class="gdd-entity-card troop">
+          <div class="gdd-entity-visual">
+            <svg viewBox="0 0 100 100" width="80" height="80">
+              <circle cx="50" cy="50" r="40" fill="#2ec4b6" opacity="0.15"/>
+              <path d="M30 70 L70 30 M70 30 L55 30 M70 30 L70 45" fill="none" stroke="#2ec4b6" stroke-width="3" stroke-linecap="round"/>
+              <path d="M 25 75 A 35 35 0 0 1 75 25" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="gdd-entity-info">
+            <h4>Cazadora con Arco</h4>
+            <p class="gdd-entity-role">A Distancia • Soporte</p>
+            <p class="gdd-entity-desc">Rápida y precisa. Puede disparar a objetivos terrestres y aéreos. Excelente para defender detrás de muros.</p>
+            <div class="gdd-entity-stats">
+              <span><strong>Costo:</strong> 3 Oro</span>
+              <span><strong>HP:</strong> 280</span>
+              <span><strong>Daño:</strong> 38/s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta 3: Mago -->
+        <div class="gdd-entity-card troop">
+          <div class="gdd-entity-visual">
+            <svg viewBox="0 0 100 100" width="80" height="80">
+              <circle cx="50" cy="50" r="40" fill="#8338ec" opacity="0.15"/>
+              <circle cx="50" cy="50" r="15" fill="#8338ec" stroke="#fff" stroke-width="2"/>
+              <path d="M 50 15 L 50 25 M 50 75 L 50 85 M 15 50 L 25 50 M 75 50 L 85 50" stroke="#8338ec" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="gdd-entity-info">
+            <h4>Mago de Tormentas</h4>
+            <p class="gdd-entity-role">Distancia • Daño de Área</p>
+            <p class="gdd-entity-desc">Canaliza electricidad. Golpea múltiples unidades agrupadas en cadena, ideal contra hordas de enemigos.</p>
+            <div class="gdd-entity-stats">
+              <span><strong>Costo:</strong> 4 Oro</span>
+              <span><strong>HP:</strong> 390</span>
+              <span><strong>Daño:</strong> 62/s</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Enemigos del Caos (Campaña PvE)</h3>
+      <div class="gdd-entity-grid">
+        <!-- Tarjeta 4: Duende -->
+        <div class="gdd-entity-card enemy">
+          <div class="gdd-entity-visual">
+            <svg viewBox="0 0 100 100" width="80" height="80">
+              <circle cx="50" cy="50" r="40" fill="#ff006e" opacity="0.15"/>
+              <path d="M25 45 Q35 25 50 40 Q65 25 75 45 Q65 60 50 45 Q35 60 25 45 Z" fill="#ff006e" stroke="#fff" stroke-width="2"/>
+              <circle cx="38" cy="42" r="3" fill="#fff"/>
+              <circle cx="62" cy="42" r="3" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="gdd-entity-info">
+            <h4>Duende Asaltador</h4>
+            <p class="gdd-entity-role">Veloz • Saqueador</p>
+            <p class="gdd-entity-desc">Furtivo e hiperactivo. Ignora a tus tropas para atacar y saquear directamente tus Extractores de Éter.</p>
+            <div class="gdd-entity-stats">
+              <span><strong>Dificultad:</strong> Baja</span>
+              <span><strong>Velocidad:</strong> Muy Alta</span>
+              <span><strong>Objetivo:</strong> Recursos</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta 5: Goliath -->
+        <div class="gdd-entity-card enemy">
+          <div class="gdd-entity-visual">
+            <svg viewBox="0 0 100 100" width="80" height="80">
+              <circle cx="50" cy="50" r="40" fill="#3a86c8" opacity="0.15"/>
+              <rect x="30" y="30" width="40" height="40" rx="6" fill="#3a86c8" stroke="#fff" stroke-width="2"/>
+              <line x1="30" y1="50" x2="70" y2="50" stroke="#fff" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="gdd-entity-info">
+            <h4>Goliath Acorazado</h4>
+            <p class="gdd-entity-role">Pesado • Antiestructuras</p>
+            <p class="gdd-entity-desc">Un autómata de piedra masivo. Avanza lentamente hacia las torres defensivas e inflige daño triple.</p>
+            <div class="gdd-entity-stats">
+              <span><strong>Dificultad:</strong> Media</span>
+              <span><strong>HP:</strong> 1,800</span>
+              <span><strong>Daño:</strong> 110/s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta 6: Segador -->
+        <div class="gdd-entity-card enemy">
+          <div class="gdd-entity-visual">
+            <svg viewBox="0 0 100 100" width="80" height="80">
+              <circle cx="50" cy="50" r="40" fill="#ff4d4d" opacity="0.15"/>
+              <path d="M50 15 L80 40 L50 65 L20 40 Z" fill="#ff4d4d" stroke="#fff" stroke-width="2"/>
+              <circle cx="50" cy="40" r="8" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="gdd-entity-info">
+            <h4>Jefe: Segador de Almas</h4>
+            <p class="gdd-entity-role">Jefe Final • Invocador</p>
+            <p class="gdd-entity-desc">El comandante supremo de la campaña. Dispara proyectiles oscuros y resucita esqueletos cada 15 segundos.</p>
+            <div class="gdd-entity-stats">
+              <span><strong>Dificultad:</strong> Extrema</span>
+              <span><strong>HP:</strong> 8,500</span>
+              <span><strong>Daño:</strong> 180/s (Área)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
   }
 ];
 
